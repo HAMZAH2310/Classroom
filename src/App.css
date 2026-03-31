@@ -14,17 +14,6 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-
 :root {
   --background: oklch(0.9730 0.0133 286.1503);
   --foreground: oklch(0.3015 0.0572 282.4176);
@@ -186,12 +175,255 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+/* ============================================================
+   LIST PAGE — Premium Styling (pure CSS, no @apply below)
+   ============================================================ */
+
+/* ------ Page wrapper ------ */
+.page-title {
+  margin: 0;
+  padding-top: 0.5rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  background: linear-gradient(135deg,
+      var(--foreground) 0%,
+      color-mix(in oklch, var(--foreground) 80%, transparent) 50%,
+      var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: title-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes title-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
 
-  body {
-    @apply bg-background text-foreground;
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------ Intro / subtitle ------ */
+.into-row {
+  animation: fade-up 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.into-row p {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.65;
+  max-width: 56ch;
+  color: var(--muted-foreground);
+  letter-spacing: 0.01em;
+}
+
+/* ------ Breadcrumb pill ------ */
+nav[aria-label="breadcrumb"] {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  border: 1px solida color-mix(in oklch, var(--border) 60%, transparent);
+  background: color-mix(in oklch, var(--card) 55%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px -1px color-mix(in oklch, var(--primary) 10%, transparent);
+  transition: box-shadow 0.25s, border-color 0.25s, background 0.25s;
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+nav[aria-label="breadcrumb"]:hover {
+  border-color: color-mix(in oklch, var(--primary) 35%, transparent);
+  box-shadow: 0 4px 12px -2px color-mix(in oklch, var(--primary) 12%, transparent);
+}
+
+nav[aria-label="breadcrumb"] a {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+nav[aria-label="breadcrumb"] a:hover {
+  color: var(--primary);
+}
+
+nav[aria-label="breadcrumb"] [aria-current="page"] {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.01em;
+}
+
+/* ------ Action bar (search + filter) ------ */
+.action-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  animation: fade-up 0.7s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (min-width: 640px) {
+  .action-row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* ------ Search field ------ */
+.search-field {
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.125rem;
+  height: 1.125rem;
+  color: color-mix(in oklch, var(--muted-foreground) 55%, transparent);
+  pointer-events: none;
+  transition: color 0.25s, transform 0.25s;
+  z-index: 1;
+}
+
+.search-field:focus-within .search-icon {
+  color: var(--primary);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.search-field input {
+  width: 100%;
+  height: 3rem !important;
+  padding-left: 2.75rem !important;
+  padding-right: 1rem !important;
+  font-size: 0.9375rem !important;
+  border-radius: 0.875rem !important;
+  border: 1.5px solid color-mix(in oklch, var(--border) 60%, transparent) !important;
+  background: color-mix(in oklch, var(--card) 50%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 1px 4px -1px color-mix(in oklch, var(--primary) 8%, transparent) !important;
+  color: var(--foreground) !important;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s !important;
+}
+
+.search-field input::placeholder {
+  color: color-mix(in oklch, var(--muted-foreground) 45%, transparent);
+}
+
+.search-field input:hover {
+  background: color-mix(in oklch, var(--card) 70%, transparent) !important;
+  border-color: color-mix(in oklch, var(--border) 80%, transparent) !important;
+}
+
+.search-field input:focus {
+  outline: none !important;
+  background: color-mix(in oklch, var(--card) 85%, transparent) !important;
+  border-color: color-mix(in oklch, var(--primary) 50%, transparent) !important;
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--primary) 12%, transparent),
+    0 2px 8px -2px color-mix(in oklch, var(--primary) 15%, transparent) !important;
+}
+
+/* ------ Select / filter trigger ------ */
+.action-row [role="combobox"] {
+  height: 3rem !important;
+  min-width: 13rem !important;
+  padding-left: 1.125rem !important;
+  padding-right: 1.125rem !important;
+  font-size: 0.9375rem !important;
+  border-radius: 0.875rem !important;
+  border: 1.5px solid color-mix(in oklch, var(--border) 60%, transparent) !important;
+  background: color-mix(in oklch, var(--card) 50%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 1px 4px -1px color-mix(in oklch, var(--primary) 8%, transparent) !important;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s !important;
+}
+
+.action-row [role="combobox"]:hover {
+  background: color-mix(in oklch, var(--card) 70%, transparent) !important;
+  border-color: color-mix(in oklch, var(--border) 80%, transparent) !important;
+}
+
+.action-row [role="combobox"]:focus {
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--primary) 12%, transparent) !important;
+}
+
+/* ------ Table area ------ */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+thead th {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  padding: 0.5rem 1.25rem;
+  background: transparent;
+  border: none;
+}
+
+tbody tr {
+  background: color-mix(in oklch, var(--card) 65%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px -1px color-mix(in oklch, var(--border) 60%, transparent);
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+tbody tr:hover {
+  transform: translateY(-2px);
+  background: var(--card);
+  box-shadow:
+    0 8px 24px -4px color-mix(in oklch, var(--primary) 10%, transparent),
+    0 2px 6px -2px color-mix(in oklch, var(--border) 80%, transparent);
+}
+
+tbody td {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+  vertical-align: middle;
+}
+
+tbody td:first-child {
+  border-left: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+  border-radius: 1rem 0 0 1rem;
+}
+
+tbody td:last-child {
+  border-right: 1px solid color-mix(in oklch, var(--border) 40%, transparent);
+  border-radius: 0 1rem 1rem 0;
+}
+
+/* ------ Shared fade-up animation ------ */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
