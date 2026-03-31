@@ -5,7 +5,7 @@ import { ListView } from "@/components/refine-ui/views/list-view"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { DEPARTMENTS_OPTIONS } from "@/constants"
+import { DEPARTMENT_OPTIONS } from "@/constants"
 import { Subject } from "@/types"
 import { useTable } from "@refinedev/react-table"
 import { ColumnDef } from "@tanstack/react-table"
@@ -44,7 +44,7 @@ const Subjectlist = () => {
             },
             {
                 id: 'department',
-                accessorKey: 'department',
+                accessorKey: 'department.name',
                 size: 150,
                 header: () => <p className="column-title">Department</p>,
                 cell: ({ getValue }) => <Badge variant="secondary">{getValue() as string}</Badge>
@@ -109,7 +109,7 @@ const Subjectlist = () => {
                             >
                                 All Departments
                             </SelectItem>
-                            {DEPARTMENTS_OPTIONS.map(departmen => (
+                            {DEPARTMENT_OPTIONS.map(departmen => (
                                 <SelectItem
                                     key={departmen.value}
                                     value={departmen.value}
