@@ -6,7 +6,13 @@ import { Button } from "./ui/button";
 
 const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidgetProps) => {
     const widgetRef = useRef<CloudinaryWidget | null>(null);
+    const onChangeRef = useRef(onChange);
     const [preview, setPreview] = useState<UploadWidgetValue | null>(value);
+
+    // Stabilize the onChange callback
+    useEffect(() => {
+        onChangeRef.current = onChange;
+    }, [onChange]);
 
     useEffect(() => {
         setPreview(value);
@@ -50,11 +56,17 @@ const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidget
                         publicId: result.info.public_id,
                     };
                     setPreview(newValue);
-                    onChange?.(newValue);
+                    onChangeRef.current?.(newValue);
                 }
             }
         );
-    }, [onChange]);
+
+        // Cleanup on unmount or when dependencies change
+        return () => {
+            widgetRef.current?.destroy();
+            widgetRef.current = null;
+        };
+    }, []); // Only create once on mount unless constants are truly dynamic
 
     const openWidget = () => {
         if (!disabled) {
@@ -65,7 +77,7 @@ const UploadWidget = ({ value = null, onChange, disabled = false }: UploadWidget
     const handleRemove = (e: React.MouseEvent) => {
         e.stopPropagation();
         setPreview(null);
-        onChange?.(null);
+        onChangeRef.current?.(null);
     };
 
     return (

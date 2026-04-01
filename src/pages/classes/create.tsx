@@ -2,7 +2,8 @@ import { CreateView, CreateViewHeader } from "@/components/refine-ui/views/creat
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useForm } from "@refinedev/react-hook-form";
+import { useForm, Resolver } from "react-hook-form";
+import { useForm as useRefineForm } from "@refinedev/react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { classSchema } from "@/lib/schema";
 import { z } from 'zod'
@@ -25,8 +26,8 @@ import UploadWidget from "@/components/upload_widget";
 type ClassFormValues = z.infer<typeof classSchema>;
 
 const ClassCreate = () => {
-    const form = useForm<ClassFormValues>({
-        resolver: zodResolver(classSchema) as any,
+    const form = useRefineForm<any, any, ClassFormValues>({
+        resolver: zodResolver(classSchema) as Resolver<ClassFormValues>,
         refineCoreProps: {
             resource: 'classes',
             action: 'create',

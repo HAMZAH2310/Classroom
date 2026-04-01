@@ -3,7 +3,7 @@ import { object, string, number, enum as zEnum, array, coerce } from "zod";
 export const facultySchema = object({
     name: string().min(2, 'Name must be at least 2 characters'),
     emails: string().email(),
-    role: zEnum(['admin', 'teacher', 'students']),
+    role: zEnum(['admin', 'teacher', 'student']),
     department: string(),
     image: string().optional(),
     imageCldPubId: string().optional(),
