@@ -231,19 +231,6 @@ const ClassCreate = () => {
                                                 </FormItem>
                                             )}
                                         />
-                                        <FormField
-                                            control={control}
-                                            name="bannerCldPubId"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-muted-foreground font-medium small uppercase tracking-wider">Banner</FormLabel>
-                                                    <FormControl>
-                                                        <Input className="bg-background/50 border-white/10" placeholder="...." {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
                                     </div>
 
                                     <div className="flex items-center justify-end gap-4 pt-4">
