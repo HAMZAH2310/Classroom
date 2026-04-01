@@ -65,6 +65,8 @@ const getEnvVar = (key: string): string => {
 
 export const CLOUDINARY_UPLOAD_URL = getEnvVar("VITE_CLOUDINARY_UPLOAD_URL");
 export const CLOUDINARY_CLOUD_NAME = getEnvVar("VITE_CLOUDINARY_CLOUD_NAME");
+export const CLOUDINARY_API_KEY = getEnvVar("VITE_CLOUDINARY_API_KEY");
+export const CLOUDINARY_UPLOAD_PRESET = getEnvVar("VITE_CLOUDINARY_UPLOAD_PRESET");
 export const BACKEND_BASE_URL = getEnvVar("VITE_BACKEND_URL");
 
 export const BASE_URL = import.meta.env.VITE_API_URL;
@@ -73,21 +75,20 @@ export const REFRESH_TOKEN_KEY = import.meta.env.VITE_REFRESH_TOKEN_KEY
 
 export const REFRESH_TOKEN_URL = `${BASE_URL}/refresh-token`;
 
-export const CLOUDINARY_UPLOAD_PRESET = getEnvVar("VITE_CLOUDINARY_UPLOAD_PRESET");
-
 export const teachers = [
-    {
-        id: "1",
-        name: "Furina",
-    },
-    {
-        id: "2",
-        name: "Neuvillette",
-    },
-    {
-        id: "3",
-        name: "Kazuha",
-    },
+    { id: "1", name: "Furina de Fontaine" },
+    { id: "2", name: "Neuvillette" },
+    { id: "3", name: "Kaedehara Kazuha" },
+    { id: "4", name: "Nahida" },
+    { id: "5", name: "Raiden Shogun" },
+    { id: "6", name: "Zhongli" },
+    { id: "7", name: "Wriothesley" },
+    { id: "8", name: "Alhaitham" },
+    { id: "9", name: "Yae Miko" },
+    { id: "10", name: "Jean Gunnhildr" },
+    { id: "11", name: "Diluc Ragnvindr" },
+    { id: "12", name: "Cyno" },
+    { id: "13", name: "Tighnari" },
 ];
 
 export const subjects = [
