@@ -35,6 +35,16 @@ function App() {
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: true,
                 projectId: "dSJG92-iS3Amf-5NZlqU",
+                reactQuery: {
+                  clientConfig: {
+                    defaultOptions: {
+                      queries: {
+                        staleTime: 1000 * 60 * 5, // Cache API GET requests for 5 minutes
+                        refetchOnWindowFocus: false, // Prevent refetching when tab is focused
+                      },
+                    },
+                  },
+                },
               }}
               resources={[
                 {
