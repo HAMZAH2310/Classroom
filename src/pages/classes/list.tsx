@@ -134,7 +134,7 @@ const ClassList = () => {
                     <Input
                         type="text"
                         placeholder="Search by class name..."
-                        className="p-10 w-full"
+                        className="pl-10 w-full"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
