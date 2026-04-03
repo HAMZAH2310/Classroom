@@ -18,10 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useSelect } from "@refinedev/core";
+import { useList, useSelect } from "@refinedev/core";
 import { SaveIcon, Terminal, GraduationCap } from "lucide-react";
-import { teachers as staticTeachers } from "@/constants";
+// import { teachers as staticTeachers } from "@/constants";
 import UploadWidget from "@/components/upload_widget";
+import { Subject, User } from "@/types";
 
 type ClassFormValues = z.infer<typeof classSchema>;
 
@@ -54,22 +55,30 @@ const ClassCreate = () => {
     const description = watch("description");
     const capacity = watch("capacity");
 
-    const { options: subjectOptions } = useSelect({
-        resource: "subjects",
-        optionLabel: "name",
-        optionValue: "id",
-    });
 
-    const { options: teacherOptions } = useSelect({
-        resource: "faculty",
-        optionLabel: "name",
-        optionValue: "id",
-    });
+    const { query: subjectsQuery } = useList<Subject>({
+        resource: 'subjects',
+        pagination: {
+            pageSize: 100
+        }
+    })
 
-    // Use static teachers if no faculty resource found (for dev/demo)
-    const combinedTeacherOptions = (teacherOptions && teacherOptions.length > 0)
-        ? teacherOptions
-        : staticTeachers.map(t => ({ label: t.name, value: t.id }));
+    const { query: teachersQuery } = useList<User>({
+        resource: 'users',
+        filters: [
+            { field: 'role', operator: 'eq', value: 'teacher' }
+        ],
+        pagination: {
+            pageSize: 100
+        }
+    })
+
+    const subjects = subjectsQuery?.data?.data || [];
+    const subjectsLoading = subjectsQuery.isLoading;
+
+    const teachers = teachersQuery?.data?.data || [];
+    const teachersLoading = teachersQuery.isLoading;
+
 
     const bannerPublicId = form.watch("bannerCldPubId");
 
@@ -173,9 +182,9 @@ const ClassCreate = () => {
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            {subjectOptions?.map((option) => (
-                                                                <SelectItem key={option.value} value={option.value.toString()}>
-                                                                    {option.label}
+                                                            {subjects?.map((subject) => (
+                                                                <SelectItem key={subject.id} value={subject.id.toString()} disabled={subjectsLoading}>
+                                                                    {subject.name}
                                                                 </SelectItem>
                                                             ))}
                                                         </SelectContent>
@@ -198,9 +207,9 @@ const ClassCreate = () => {
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            {combinedTeacherOptions.map((option) => (
-                                                                <SelectItem key={option.value} value={option.value.toString()}>
-                                                                    {option.label}
+                                                            {teachers.map((teacher) => (
+                                                                <SelectItem key={teacher.id} value={teacher.id.toString()} disabled={teachersLoading}>
+                                                                    {teacher.name}
                                                                 </SelectItem>
                                                             ))}
                                                         </SelectContent>
@@ -228,19 +237,6 @@ const ClassCreate = () => {
                                                     {errors.bannerCldPubId && !errors.bannerUrl && (
                                                         <p className="text-red-500 text-sm">{errors.bannerCldPubId.message?.toString()}</p>
                                                     )}
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={control}
-                                            name="bannerCldPubId"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel className="text-muted-foreground font-medium small uppercase tracking-wider">Banner</FormLabel>
-                                                    <FormControl>
-                                                        <Input className="bg-background/50 border-white/10" placeholder="...." {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
                                                 </FormItem>
                                             )}
                                         />
