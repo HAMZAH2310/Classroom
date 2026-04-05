@@ -1,6 +1,6 @@
 import { BACKEND_BASE_URL } from "@/constants";
 import { ListResponse } from "@/types";
-import { HttpError } from "@refinedev/core";
+import { GetOneResponse, HttpError } from "@refinedev/core";
 import { createDataProvider, CreateDataProviderOptions } from "@refinedev/rest";
 
 const buildHttpError = async (response: Response): Promise<HttpError> => {
@@ -39,7 +39,7 @@ const options: CreateDataProviderOptions = {
           if (field === 'department') params.department = value;
           if (field === 'name' || field === 'code') params.search = value;
         }
-        
+
         if (resource === 'classes') {
           if (field === 'subject') params.subject = value;
           if (field === 'teacher') params.teacher = value;
@@ -65,6 +65,15 @@ const options: CreateDataProviderOptions = {
       const payload: ListResponse = await response.json();
 
       return payload.pagination?.total ?? payload.data?.length ?? 0;
+    }
+  },
+  getOne: {
+    getEndpoint: ({ resource, id }) => `${resource}/${id}`,
+
+    mapResponse: async (response) => {
+      const json: GetOneResponse = await response.json();
+
+      return json.data ?? [];
     }
   }
 }
