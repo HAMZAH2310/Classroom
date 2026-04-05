@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ClassDetails } from "@/types"
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { useShow } from "@refinedev/core"
 import { AdvancedImage } from '@cloudinary/react'
 import { bannerPhoto } from "@/lib/claudinary";
@@ -55,7 +55,7 @@ const ClassesShow = () => {
 
                         <div>
                             <Badge variant="outline">{classDetails.capacity} spots</Badge>
-                            <Badge variant={status === 'active' ? 'default' : 'secondary'} data-status={classDetails.status}>{classDetails.status.toUpperCase()}</Badge>
+                            <Badge variant={classDetails.status === 'active' ? 'default' : 'secondary'} data-status={classDetails.status}>{classDetails.status?.toUpperCase()}</Badge>
                         </div>
                     </div>
 
