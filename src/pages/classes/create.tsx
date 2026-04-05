@@ -82,7 +82,7 @@ const ClassCreate = () => {
 
     const bannerPublicId = form.watch("bannerCldPubId");
 
-    const setBannerImage = (file, field) => {
+    const setBannerImage = (file: any, field: any) => {
         if (file) {
             field.onChange(file.url);
             form.setValue('bannerCldPubId', file.publicId, {
@@ -142,7 +142,7 @@ const ClassCreate = () => {
                                                 <FormItem>
                                                     <FormLabel className="text-muted-foreground font-medium small uppercase tracking-wider">Capacity</FormLabel>
                                                     <FormControl>
-                                                        <Input type="number" className="bg-background/50 border-white/10 focus:ring-primary/20 transition-all duration-200" {...field} />
+                                                        <Input {...field} type="number" className="bg-background/50 border-white/10 focus:ring-primary/20 transition-all duration-200" />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
