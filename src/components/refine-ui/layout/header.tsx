@@ -8,12 +8,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { LogOutIcon, Search as SearchIcon } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { Input } from "@/components/ui/input";
 import {
   useActiveAuthProvider,
   useLogout,
   useRefineOptions,
 } from "@refinedev/core";
-import { LogOutIcon } from "lucide-react";
 
 export const Header = () => {
   const { isMobile } = useSidebar();
@@ -22,6 +25,17 @@ export const Header = () => {
 };
 
 function DesktopHeader() {
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/classes?search=${encodeURIComponent(search)}`);
+      setSearch("");
+    }
+  };
+
   return (
     <header
       className={cn(
@@ -35,13 +49,26 @@ function DesktopHeader() {
         "border-b",
         "border-border",
         "bg-sidebar",
-        "pr-3",
-        "justify-end",
+        "px-4",
+        "justify-between",
         "z-40"
       )}
     >
-      <ThemeToggle />
-      <UserDropdown />
+      <div className="flex-1 max-w-md">
+        <form onSubmit={handleSearch} className="relative">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Global search (classes, etc)..."
+            className="pl-10 bg-background/50 border-border focus:ring-1 focus:ring-primary h-9"
+          />
+        </form>
+      </div>
+      <div className="flex items-center gap-4">
+        <ThemeToggle />
+        <UserDropdown />
+      </div>
     </header>
   );
 }

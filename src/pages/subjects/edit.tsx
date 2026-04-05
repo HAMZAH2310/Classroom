@@ -1,4 +1,4 @@
-import { CreateView, CreateViewHeader } from "@/components/refine-ui/views/create-view";
+import { EditView, EditViewHeader } from "@/components/refine-ui/views/edit-view";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -24,23 +24,18 @@ import { Department } from "@/types";
 
 type SubjectFormValues = z.infer<typeof subjectSchema>;
 
-const SubjectCreate = () => {
+const SubjectEdit = () => {
     const form = useRefineForm<any, any, SubjectFormValues>({
         resolver: zodResolver(subjectSchema) as Resolver<SubjectFormValues>,
         refineCoreProps: {
             resource: 'subjects',
-            action: 'create',
+            action: 'edit',
             redirect: 'list',
-        },
-        defaultValues: {
-            code: '',
-            name: '',
-            description: '',
         },
     });
 
     const {
-        refineCore: { onFinish, formLoading },
+        refineCore: { onFinish, formLoading, query },
         saveButtonProps,
         control,
         handleSubmit,
@@ -52,10 +47,20 @@ const SubjectCreate = () => {
     });
 
     const departments = departmentsData?.data || [];
+    const isLoading = query?.isLoading;
+
+    if (isLoading) {
+        return (
+            <EditView className="container max-w-2xl py-6 space-y-8">
+                <EditViewHeader title="Edit Subject" />
+                <p className="text-muted-foreground">Loading subject details...</p>
+            </EditView>
+        );
+    }
 
     return (
-        <CreateView className="container max-w-2xl py-6 space-y-8">
-            <CreateViewHeader title="Create New Subject" />
+        <EditView className="container max-w-2xl py-6 space-y-8">
+            <EditViewHeader title="Edit Subject" />
 
             <Card className="border-none shadow-xl bg-card/50 backdrop-blur-sm ring-1 ring-white/10">
                 <CardHeader className="pb-4">
@@ -65,7 +70,7 @@ const SubjectCreate = () => {
                         </div>
                         <div>
                             <CardTitle className="text-xl font-bold tracking-tight">Subject Details</CardTitle>
-                            <CardDescription>Enter the information for the new subject.</CardDescription>
+                            <CardDescription>Update the subject information.</CardDescription>
                         </div>
                     </div>
                 </CardHeader>
@@ -153,9 +158,9 @@ const SubjectCreate = () => {
                                     className="px-8 bg-gradient-to-r from-primary to-primary/80 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary/20"
                                     {...saveButtonProps}
                                 >
-                                    {formLoading ? "Creating..." : (
+                                    {formLoading ? "Saving..." : (
                                         <span className="flex items-center gap-2">
-                                            <SaveIcon className="w-4 h-4" /> Create Subject
+                                            <SaveIcon className="w-4 h-4" /> Save Changes
                                         </span>
                                     )}
                                 </Button>
@@ -164,8 +169,8 @@ const SubjectCreate = () => {
                     </Form>
                 </CardContent>
             </Card>
-        </CreateView>
+        </EditView>
     );
 };
 
-export default SubjectCreate
+export default SubjectEdit

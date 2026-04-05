@@ -3,10 +3,14 @@ export type Subject = {
     name: string;
     code: string;
     description: string;
+    departmentId?: number;
     department: {
         id?: number;
+        code?: string;
         name: string;
+        description?: string;
     };
+    classCount?: number;
     createdAt?: string;
 };
 
@@ -81,11 +85,13 @@ export type User = {
     createdAt: string;
     updatedAt: string;
     email: string;
+    emailVerified?: boolean;
     name: string;
     role: UserRole;
     image?: string;
     imageCldPubId?: string;
     department?: string;
+    enrollmentId?: number;
 };
 
 export type Schedule = {
@@ -96,25 +102,58 @@ export type Schedule = {
 
 export type Department = {
     id: number;
+    code: string;
     name: string;
-    description: string;
+    description?: string;
+    subjectCount?: number;
+    createdAt?: string;
+    updatedAt?: string;
 };
 
 export type ClassDetails = {
     id: number;
     name: string;
     description: string;
-    status: "active" | "inactive";
+    status: "active" | "inactive" | "archived";
     capacity: number;
-    courseCode: string;
-    courseName: string;
+    courseCode?: string;
+    courseName?: string;
     bannerUrl?: string;
     bannerCldPubId?: string;
     subject?: Subject;
     teacher?: User;
     department?: Department;
-    schedules: Schedule[];
+    schedules?: Schedule[];
     inviteCode?: string;
+    enrollmentCount?: number;
+};
+
+export type Enrollment = {
+    id: number;
+    classId: number;
+    studentId: string;
+    createdAt?: string;
+    updatedAt?: string;
+};
+
+export type DashboardStats = {
+    totalUsers: number;
+    totalClasses: number;
+    activeClasses: number;
+    totalSubjects: number;
+    totalDepartments: number;
+    totalEnrollments: number;
+};
+
+export type ChartDataItem = {
+    [key: string]: string | number;
+};
+
+export type ActivityItem = {
+    id: string;
+    type: "enrollment" | "class_created";
+    description: string;
+    createdAt: string;
 };
 
 export type SignUpPayload = {

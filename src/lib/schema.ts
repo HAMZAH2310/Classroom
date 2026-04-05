@@ -1,5 +1,11 @@
 import { object, string, number, enum as zEnum, array, coerce } from "zod";
 
+export const departmentSchema = object({
+    code: string().min(2, 'Department code must be at least 2 characters').max(50, 'Code too long'),
+    name: string().min(2, 'Name must be at least 2 characters'),
+    description: string().optional(),
+});
+
 export const facultySchema = object({
     name: string().min(2, 'Name must be at least 2 characters'),
     email: string().email(),
@@ -9,13 +15,24 @@ export const facultySchema = object({
     imageCldPubId: string().optional(),
 });
 
+export const userEditSchema = object({
+    name: string().min(2, 'Name must be at least 2 characters'),
+    role: zEnum(['admin', 'teacher', 'student']),
+    image: string().optional(),
+    imageCldPubId: string().optional(),
+});
+
 export const subjectSchema = object({
     name: string().min(3, "Subject name must be at least 3 characters"),
-    code: string().min(5, "Subject code must be at least 5 characters"),
+    code: string().min(2, "Subject code must be at least 2 characters"),
     description: string()
         .min(5, "Subject description must be at least 5 characters"),
-    department: string()
-        .min(2, "Subject department must be at least 2 characters"),
+    departmentId: coerce
+        .number({
+            required_error: "Department is required",
+            invalid_type_error: "Department is required",
+        })
+        .min(1, "Department is required"),
 });
 
 const scheduleSchema = object({

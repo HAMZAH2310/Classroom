@@ -1,10 +1,10 @@
-import { CreateView, CreateViewHeader } from "@/components/refine-ui/views/create-view";
+import { EditView, EditViewHeader } from "@/components/refine-ui/views/edit-view";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useForm as useRefineForm } from "@refinedev/react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { subjectSchema } from "@/lib/schema";
+import { departmentSchema } from "@/lib/schema";
 import { z } from 'zod'
 import { Resolver } from "react-hook-form";
 import {
@@ -17,55 +17,51 @@ import {
 } from '@/components/ui/form'
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useList } from "@refinedev/core";
-import { SaveIcon, BookOpen } from "lucide-react";
-import { Department } from "@/types";
+import { SaveIcon, Building2 } from "lucide-react";
 
-type SubjectFormValues = z.infer<typeof subjectSchema>;
+type DepartmentFormValues = z.infer<typeof departmentSchema>;
 
-const SubjectCreate = () => {
-    const form = useRefineForm<any, any, SubjectFormValues>({
-        resolver: zodResolver(subjectSchema) as Resolver<SubjectFormValues>,
+const DepartmentEdit = () => {
+    const form = useRefineForm<any, any, DepartmentFormValues>({
+        resolver: zodResolver(departmentSchema) as Resolver<DepartmentFormValues>,
         refineCoreProps: {
-            resource: 'subjects',
-            action: 'create',
-            redirect: 'list',
-        },
-        defaultValues: {
-            code: '',
-            name: '',
-            description: '',
+            resource: 'departments',
+            action: 'edit',
+            redirect: 'show',
         },
     });
 
     const {
-        refineCore: { onFinish, formLoading },
+        refineCore: { onFinish, formLoading, query },
         saveButtonProps,
         control,
         handleSubmit,
     } = form;
 
-    const { data: departmentsData, isLoading: deptLoading } = useList<Department>({
-        resource: 'departments',
-        pagination: { pageSize: 100 },
-    });
+    const isLoading = query?.isLoading;
 
-    const departments = departmentsData?.data || [];
+    if (isLoading) {
+        return (
+            <EditView className="container max-w-2xl py-6 space-y-8">
+                <EditViewHeader title="Edit Department" />
+                <p className="text-muted-foreground">Loading department details...</p>
+            </EditView>
+        );
+    }
 
     return (
-        <CreateView className="container max-w-2xl py-6 space-y-8">
-            <CreateViewHeader title="Create New Subject" />
+        <EditView className="container max-w-2xl py-6 space-y-8">
+            <EditViewHeader title="Edit Department" />
 
             <Card className="border-none shadow-xl bg-card/50 backdrop-blur-sm ring-1 ring-white/10">
                 <CardHeader className="pb-4">
                     <div className="flex items-center gap-3 mb-2">
                         <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                            <BookOpen className="w-5 h-5" />
+                            <Building2 className="w-5 h-5" />
                         </div>
                         <div>
-                            <CardTitle className="text-xl font-bold tracking-tight">Subject Details</CardTitle>
-                            <CardDescription>Enter the information for the new subject.</CardDescription>
+                            <CardTitle className="text-xl font-bold tracking-tight">Department Details</CardTitle>
+                            <CardDescription>Update the department information.</CardDescription>
                         </div>
                     </div>
                 </CardHeader>
@@ -79,9 +75,9 @@ const SubjectCreate = () => {
                                     name="code"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider">Subject Code</FormLabel>
+                                            <FormLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider">Department Code</FormLabel>
                                             <FormControl>
-                                                <Input className="bg-background/50 border-white/10" placeholder="e.g. CS101" {...field} />
+                                                <Input className="bg-background/50 border-white/10" placeholder="e.g. CS, MATH" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -93,9 +89,9 @@ const SubjectCreate = () => {
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider">Subject Name</FormLabel>
+                                            <FormLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider">Department Name</FormLabel>
                                             <FormControl>
-                                                <Input className="bg-background/50 border-white/10" placeholder="e.g. Introduction to CS" {...field} />
+                                                <Input className="bg-background/50 border-white/10" placeholder="e.g. Computer Science" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -105,38 +101,13 @@ const SubjectCreate = () => {
 
                             <FormField
                                 control={control}
-                                name="departmentId"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider">Department</FormLabel>
-                                        <Select onValueChange={(val) => field.onChange(Number(val))} value={field.value?.toString()}>
-                                            <FormControl>
-                                                <SelectTrigger className="bg-background/50 border-white/10">
-                                                    <SelectValue placeholder="Select a department" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                {departments.map((dept) => (
-                                                    <SelectItem key={dept.id} value={dept.id.toString()} disabled={deptLoading}>
-                                                        {dept.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={control}
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider">Description</FormLabel>
                                         <FormControl>
                                             <Textarea
-                                                placeholder="Brief description of the subject..."
+                                                placeholder="Brief description of the department..."
                                                 className="min-h-[100px] bg-background/50 border-white/10 resize-none"
                                                 {...field}
                                             />
@@ -153,9 +124,9 @@ const SubjectCreate = () => {
                                     className="px-8 bg-gradient-to-r from-primary to-primary/80 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg shadow-primary/20"
                                     {...saveButtonProps}
                                 >
-                                    {formLoading ? "Creating..." : (
+                                    {formLoading ? "Saving..." : (
                                         <span className="flex items-center gap-2">
-                                            <SaveIcon className="w-4 h-4" /> Create Subject
+                                            <SaveIcon className="w-4 h-4" /> Save Changes
                                         </span>
                                     )}
                                 </Button>
@@ -164,8 +135,8 @@ const SubjectCreate = () => {
                     </Form>
                 </CardContent>
             </Card>
-        </CreateView>
+        </EditView>
     );
 };
 
-export default SubjectCreate
+export default DepartmentEdit
